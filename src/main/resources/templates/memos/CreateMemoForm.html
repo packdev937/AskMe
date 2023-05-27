@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<form role="form" action="/memos/new" th:object="${memoForm}" method="post">
+    <div class="form-group">
+        <label th:for="question">Question</label>
+        <input type="text" th:field="*{question}" placeholder="Input Question"/>
+    </div>
+    <div class="form-group">
+        <label th:for="answer">Answer</label>
+        <input type="text" th:field="*{answer}" placeholder="Input Answer"/>
+    </div>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
