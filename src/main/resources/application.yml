@@ -10,8 +10,8 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        show_sql: true # 하이버 네이트가 실행한 SQL을 출력한다
+        format_sql: true # 하이버 네이트가 실행한 SQL을 출력할 때 보기 쉽게 정렬한다
 
 logging.level:
   org.hibernate.SQL: debug

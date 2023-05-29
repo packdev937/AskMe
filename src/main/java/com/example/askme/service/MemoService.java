@@ -24,7 +24,14 @@ public class MemoService {
         return memoRepository.findOne(memoId);
     }
 
-    public List<Memo> findAll() {
+    public List<Memo> findMemos() {
         return memoRepository.findAll();
+    }
+
+    public boolean isCheckedTrue(Long id) {
+        Memo memo = findOne(id);
+        if (memo.isChecked())
+            return true;
+        else return false;
     }
 }
