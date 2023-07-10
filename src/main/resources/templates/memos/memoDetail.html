@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<head>
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="container" th:object="${memo}">
+    <span>Question</span>
+    <span th:text="${memo.question}"></span>
+    <br>
+    <span>Answer</span>
+    <span th:text="${memo.answer}"></span>
+    <br>
+    <a href="#" th:href="@{/memos/test}" class="btn btn-primary" role="button">다음으로</a>
+</div>
+</body>
+</html>
