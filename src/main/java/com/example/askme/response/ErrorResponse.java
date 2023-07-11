@@ -1,6 +1,8 @@
 package com.example.askme.response;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,17 @@ public class ErrorResponse {
     private final String code;
     private final String message;
 
-    private Map<String, String> validation = new HashMap<>();
+    // 가능하면 Map을 안쓰는 것이 좋다.
+    private List<ValidationTuple> validation = new LinkedList<>();
 
     public void addValidation(String fieldName, String errorMessage) {
-        this.validation.put(fieldName, errorMessage);
+        validation.add(new ValidationTuple(fieldName, errorMessage));
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    private class ValidationTuple {
+        private final String fieldName;
+        private final String errorMessage;
     }
 }
