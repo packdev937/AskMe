@@ -1,13 +1,34 @@
 package com.example.askme.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.example.askme.request.PostCreateDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class PostController {
 
-    @GetMapping("/posts")
-    public String get(){
+    // Version 1
+//    @PostMapping("/posts")
+//    public String post(@RequestParam String title, @RequestParam String content){
+//        log.info("title={}, content={}", title, content);
+//        return "Hello World";
+//    }
+
+    // Version 2
+//    @PostMapping("/posts")
+//    public String post(@RequestParam Map<String, String> params){
+//        log.info("params={}", params);
+//        return "Hello World";
+//    }
+
+    // Version 3 Data에 대한 클래스 형식 (DTO)를 새롭게 만드는 것
+    // application/x-www-form-urlencoded 가 아닌 application/json은 @RequestBody를 붙여줘야함
+    @PostMapping("/posts")
+    public String post(@RequestBody PostCreateDto postCreateDto){
+        log.info("postCreateDto={}", postCreateDto.toString());
         return "Hello World";
     }
 }
