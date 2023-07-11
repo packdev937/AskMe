@@ -48,7 +48,21 @@ class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"title\":\"제목입니다.\", \"content\" : \"내용입니다.\"}"))
             .andExpect(status().isOk())
-            .andExpect(content().string("Hello World"))
+            .andExpect(content().string("{}"))
+            .andDo(print());
+    }
+
+    @Test
+    @DisplayName("/posts 요청시 title 값은 필수다")
+    void test2() throws Exception {
+        mockMvc.perform(post("/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+            // title이 blank가 아닌 Null 값일 때도 동일하다
+                .content("{\"title\":null, \"content\" : \"내용입니다.\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value("타이틀을 입력해주세요"))
             .andDo(print());
     }
 }
+
+// jsonPath의 검증 방법에 대해 알아보자
