@@ -28,6 +28,7 @@ public class PostController {
         return Map.of(); // of() 에 대해 알아볼 필요가 있다.
     }
 }
+
 // ---
 // SSR -> jsp, thymeleaf, mustache, freemarker
 // html rendering

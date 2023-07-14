@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
+    @Builder
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
