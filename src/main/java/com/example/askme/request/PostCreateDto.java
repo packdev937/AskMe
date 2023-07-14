@@ -1,11 +1,11 @@
 package com.example.askme.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
 
 @ToString
-@Setter
+@Data
 public class PostCreateDto {
     @NotBlank(message = "타이틀을 입력해주세요")
     public String title;
