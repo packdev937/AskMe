@@ -1,11 +1,13 @@
 package com.example.askme.controller;
 
 import com.example.askme.request.PostCreateDto;
+import com.example.askme.service.PostService;
 import jakarta.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -15,20 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class PostController {
 
+    private final PostService postService;
+
     @PostMapping("/posts")
-    public Map<String, String> post(@Valid @RequestBody PostCreateDto postCreateDto){
-        // 1. 매번 메서드마다 값을 검증 해야 한다
-        //      > 개발자가 까먹을 수 있다
-        //      > 검증 부분에서 버그가 발생할 가능성이 높다
-        //      > 지겹다
-        // 2. 응답 값에 HashMap -> 응답 클래스를 만들어주는 것이 좋다
-        // 3. 여러 개의 예외 처리가 힘들다
-        //       > 예를 들어 title에 대한 에러 뿐만 아닌 content에 대한 에러를 처리해야 된다면 또 코드를 작성해야 한다.
-        // 4. 세 번 이상의 반복적인 작업은 피해야 한다.
-        //       > 코드 && 개발에 관한 모든 것
-        // @ControllerAdvice를 통해 개선 가능
+    public Map<String, String> post(@Valid @RequestBody PostCreateDto request) {
+        postService.write(request);
         return Map.of(); // of() 에 대해 알아볼 필요가 있다.
     }
 }
@@ -90,3 +86,13 @@ public class PostController {
 //    return error;
 
 // @ControllerAdvice
+// 1. 매번 메서드마다 값을 검증 해야 한다
+//      > 개발자가 까먹을 수 있다
+//      > 검증 부분에서 버그가 발생할 가능성이 높다
+//      > 지겹다
+// 2. 응답 값에 HashMap -> 응답 클래스를 만들어주는 것이 좋다
+// 3. 여러 개의 예외 처리가 힘들다
+//       > 예를 들어 title에 대한 에러 뿐만 아닌 content에 대한 에러를 처리해야 된다면 또 코드를 작성해야 한다.
+// 4. 세 번 이상의 반복적인 작업은 피해야 한다.
+//       > 코드 && 개발에 관한 모든 것
+// @ControllerAdvice를 통해 개선 가능
