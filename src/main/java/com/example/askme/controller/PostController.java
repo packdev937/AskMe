@@ -27,6 +27,17 @@ public class PostController {
         postService.write(request);
         return Map.of(); // of() 에 대해 알아볼 필요가 있다.
     }
+
+    // 글이 너무 많은 경우 -> 비용이 너무 많이 든다.
+    // 글이 10억개 -> DB 글을 모두 조회하는 경우 -> DB가 뻗을 수 있다.
+    // DB -> 애플리케이션 서버 쪽으로 전달하는 시간, 데이터(), 트래픽 비용 등이 많이 발생할 수 있다.
+    // 따라서 글 전체를 다 조회하는 경우는 없다. (카테고리는 다 긁어오는 경우도 존재한다.)
+    // 이를 해결하기 위해 페이징 처리를 배워야 한다.
+    // 예를 들어, 요청한 페이지에 대해서 20개, 30개 단위의 포스팅을 가져온다.
+    @GetMapping("/posts")
+    public List<PostResponse> getList(){
+        return postService.getList();
+    }
 }
 
 // ---
