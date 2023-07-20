@@ -5,13 +5,19 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true # 0부터 시작되는 페이지가 1부터 시작되도록
+        default-page-size: 5
+
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true # 하이버 네이트가 실행한 SQL을 출력한다
-        format_sql: true # 하이버 네이트가 실행한 SQL을 출력할 때 보기 쉽게 정렬한다
+        show_sql: false # 하이버 네이트가 실행한 SQL을 출력한다
+        format_sql: false # 하이버 네이트가 실행한 SQL을 출력할 때 보기 쉽게 정렬한다
 
 logging.level:
   org.hibernate.SQL: debug
