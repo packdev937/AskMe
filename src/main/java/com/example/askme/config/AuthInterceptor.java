@@ -1,5 +1,6 @@
 package com.example.askme.config;
 
+import com.example.askme.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,13 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+
+        String accessToken = request.getParameter("accessToken");
+        if (accessToken != null && accessToken.equals("auth")) {
+            return true;
+        }
+
+        throw new UnauthorizedException();
     }
 
     @Override
