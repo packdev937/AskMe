@@ -1,15 +1,19 @@
 package com.example.askme.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.askme.domain.Post;
 import com.example.askme.repository.PostRepository;
 import com.example.askme.request.PostCreateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
+import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,7 +69,6 @@ class PostControllerTest {
 
         String json = objectMapper.writeValueAsString(request);
 
-
         mockMvc.perform(post("/posts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -93,10 +96,41 @@ class PostControllerTest {
         assertEquals("제목입니다.", post.getTitle());
         assertEquals("내용입니다.", post.getContent());
     }
+
+    @Test
+    @DisplayName("여러 개의 post")
+    void test4() throws Exception {
+//        Post post1 = Post.builder()
+//            .title("title1")
+//            .content("content1")
+//            .build();
+//        postRepository.save(post1);
+//
+//        Post post2 = Post.builder()
+//            .title("title2")
+//            .content("content2")
+//            .build();
+//        postRepository.save(post2);
+        postRepository.saveAll(List.of(
+            Post.builder()
+                .title("title1")
+                .content("content1")
+                .build(),
+            Post.builder()
+                .title("title1")
+                .content("content1")
+                .build()
+        ));
+
+        mockMvc.perform(get("/posts")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()", Matchers.is(2)))
+            .andDo(print());
+    }
 }
 
 // jsonPath의 검증 방법에 대해 알아보자
-
 
 // 글 제목
 // 글 내용
@@ -114,10 +148,10 @@ class PostControllerTest {
  */
 
 //        mockMvc.perform(post("/posts")
-            // application/www-x-form-urlencoded
+// application/www-x-form-urlencoded
 //                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
 //                .param("title", "글 제목 입니다.")
 //                .param("content", "글 내용 입니다.")) // application/json
-            // applicaion/json
-            // 처음에 415가 떴는데, Json이 기본값이 아닌데 기본값인줄 알고 명시 안했기 때문
+// applicaion/json
+// 처음에 415가 떴는데, Json이 기본값이 아닌데 기본값인줄 알고 명시 안했기 때문
 //.contentType(MediaType.APPLICATION_JSON)

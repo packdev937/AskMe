@@ -1,16 +1,19 @@
 package com.example.askme.controller;
 
+import com.example.askme.domain.Post;
+import com.example.askme.domain.PostEditor;
 import com.example.askme.request.PostCreateDto;
+import com.example.askme.response.PostResponse;
 import com.example.askme.service.PostService;
 import jakarta.validation.Valid;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +26,23 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Map<String, String> post(@Valid @RequestBody PostCreateDto request) {
-        postService.write(request);
-        return Map.of(); // of() 에 대해 알아볼 필요가 있다.
+    public Post post(@Valid @RequestBody PostCreateDto request) {
+        // POST -> 200, 201
+        // Case 1. 저장한 데이터의 Entity -> Response로 응답하기
+        // Case 2. 저당한 데이터의 primary Key 응답하기
+        // return Map.of("postId", postId);
+        //         클라이언트는 수신한 id를 post 조회 API를 통해서 글 데이터를 수신 받음
+        // Case 3. 응답 필요 없음 -> 클라이언트에서 모든 POST 데이터 context를 잘 관리함
+        // Bad Case : 서버에서 반드시 ~ 로 반환한다고 fix 하는 것
+        // 한 번에 일괄적으로 잘 처리되는 케이스가 없으므로 잘 관리하는 형태가 중요하다.
+        return postService.write(request);
+    }
+
+    @GetMapping("/posts/{postId}")
+    public PostResponse get(@PathVariable Long postId) {
+        // 제목은 10글자 이상으로 해주세요 ~ -> 클라에서 요청하는게 맞다
+        // 해야된다면 응답 클래스를 만들어서, 요청에 맞는 응답을 리턴해라
+        return postService.get(postId);
     }
 
     // 글이 너무 많은 경우 -> 비용이 너무 많이 든다.
@@ -35,8 +52,18 @@ public class PostController {
     // 이를 해결하기 위해 페이징 처리를 배워야 한다.
     // 예를 들어, 요청한 페이지에 대해서 20개, 30개 단위의 포스팅을 가져온다.
     @GetMapping("/posts")
-    public List<PostResponse> getList(){
-        return postService.getList();
+    public List<PostResponse> getList(Pageable pageable) { //@RequestParam으로 받으면 주구장창 0이 Default
+        return postService.getList(pageable);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public PostResponse edit(@PathVariable Long postId, @RequestBody @Valid PostEditor request) {
+        return postService.edit(postId, request);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public Post delete(@PathVariable Long postId) {
+        return postService.delete(postId);
     }
 }
 
