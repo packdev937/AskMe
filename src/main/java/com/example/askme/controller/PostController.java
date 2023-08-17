@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,7 +27,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Post post(@Valid @RequestBody PostCreateDto request) {
+    public void post(@Valid @RequestBody PostCreateDto request, @RequestHeader String authorization) {
         // POST -> 200, 201
         // Case 1. 저장한 데이터의 Entity -> Response로 응답하기
         // Case 2. 저당한 데이터의 primary Key 응답하기
@@ -35,7 +36,9 @@ public class PostController {
         // Case 3. 응답 필요 없음 -> 클라이언트에서 모든 POST 데이터 context를 잘 관리함
         // Bad Case : 서버에서 반드시 ~ 로 반환한다고 fix 하는 것
         // 한 번에 일괄적으로 잘 처리되는 케이스가 없으므로 잘 관리하는 형태가 중요하다.
-        return postService.write(request);
+        if(authorization.equals("auth")) {
+            postService.write(request);
+        }
     }
 
     @GetMapping("/posts/{postId}")

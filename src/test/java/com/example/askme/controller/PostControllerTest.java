@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,20 +42,22 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청 시 hello world를 출력한다")
-    void test() throws Exception {
+    @DisplayName("글 작성 시 인증이 필수다")
+    void test1() throws Exception {
         PostCreateDto request = PostCreateDto.builder()
-            .title("제목입니다.")
             .content("내용입니다.")
             .build();
 
         String json = objectMapper.writeValueAsString(request);
-        // expected
+
         mockMvc.perform(post("/posts")
+                .header("authorization","auth")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-            .andExpect(status().isOk())
-            .andExpect(content().string("{}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("400"))
+            .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+            .andExpect(jsonPath("$.validation.title").value("타이틀을 입력해주세요"))
             .andDo(print());
     }
 
