@@ -2,7 +2,6 @@ package com.example.askme.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,3 @@ public class PostCreateDto {
         this.content = content;
     }
 }
-
-// Setter가 없으니깐 DTO로 받으면 값이 null이 들어갔다. -> applicaion/x-www-form-urlencoded
-// applicaion/json은 ? 없어도 된다
