@@ -1,17 +1,17 @@
 package com.example.askme.controller;
 
-import com.example.askme.domain.Post;
-import com.example.askme.domain.PostEditor;
 import com.example.askme.request.PostCreateDto;
+import com.example.askme.request.PostEditDto;
+import com.example.askme.request.PostSearchDto;
 import com.example.askme.response.PostResponse;
 import com.example.askme.service.PostService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,17 +53,17 @@ public class PostController {
     // 이를 해결하기 위해 페이징 처리를 배워야 한다.
     // 예를 들어, 요청한 페이지에 대해서 20개, 30개 단위의 포스팅을 가져온다.
     @GetMapping("/posts")
-    public List<PostResponse> getList(Pageable pageable) { //@RequestParam으로 받으면 주구장창 0이 Default
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearchDto postSearch) {
+        return postService.getList(postSearch);
     }
 
     @PatchMapping("/posts/{postId}")
-    public PostResponse edit(@PathVariable Long postId, @RequestBody @Valid PostEditor request) {
-        return postService.edit(postId, request);
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEditDto request) {
+        postService.edit(postId, request);
     }
 
     @DeleteMapping("/posts/{postId}")
-    public Post delete(@PathVariable Long postId) {
-        return postService.delete(postId);
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }

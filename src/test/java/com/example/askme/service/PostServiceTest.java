@@ -1,13 +1,11 @@
 package com.example.askme.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.askme.domain.Post;
 import com.example.askme.repository.PostRepository;
-import com.example.askme.response.PostResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -18,9 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -53,29 +48,6 @@ class PostServiceTest {
         // repository에 잘 저장되었는지 확인
         // reppsitory.count()
         // 혹은 값을 꺼내와서 넣은 값과 비교
-    }
-
-    @Test
-    @DisplayName("첫 1 페이지 글 조회")
-    void test2() {
-        // given
-        List<Post> requestPosts = IntStream.range(0, 30)
-            .mapToObj(i -> {
-                return Post.builder()
-                    .title("제목" + i)
-                    .content("내용" + i)
-                    .build();
-            }).collect(Collectors.toList());
-
-        postRepository.saveAll(requestPosts);
-
-        // when
-        // 1페이지만 나오도록
-        Pageable pageable = PageRequest.of(0, 5, Direction.DESC, "id");
-        List<PostResponse> posts = postService.getList(pageable);
-
-        // then
-        assertEquals(5L, posts.size());
     }
 
     @Test
